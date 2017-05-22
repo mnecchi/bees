@@ -1,8 +1,6 @@
-//import BetterRequest from './BetterRequest';
-const bees = require('./bees');
+const bees = require('./dist/bees');
 
 let xhr = null;
-
 bees.get('http://localhost:3000/api/canals', 
     {
         data: {

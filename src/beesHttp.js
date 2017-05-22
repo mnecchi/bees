@@ -1,68 +1,16 @@
 const urlHelper = require('url');
 const querystring = require('querystring');
+const beesResponse = require('./beesResponse');
+const beesRequest = require('./beesRequest');
+const http = require('http');
+const https = require('https');
 
-class bees {
-    static fetch(url, options, callback) {
-        let handler = null;
-        try { 
-            handler = new beesHttp(require('http'), require('https'));
-        } catch(e) {
-            try { 
-                handler = new beesXmlHttp(require('xmlhttprequest'));
-            } catch(e) {}
-        }
-
-        return new Promise((resolve, reject) => {
-            try {
-                handler.fetch(url, options, callback, resolve, reject);
-            } catch(e) {
-                console.log(e);
-                reject(e);
-            }
-        });
-    }
-
-    static get(url, options = {}, callback) {
-        options['method'] = "GET";
-        return this.fetch(url, options, callback);
-    }
-
-    static post(url, options = {}, callback) {
-        options['method'] = "POST";
-        return this.fetch(url, options, callback);
-    }
-}
-
-class beesResponse {
-    constructor(body) {
-        this.toString = () => { return body; };
-        this.text = () => { return body; };
-        this.json = () => { return JSON.parse(body); };
-    }
-}
-
-class beesRequest {
-    constructor(request) {
-        this.abort = () => { request.abort(); };
-    }
-}
-
-class beesHandler {
-    fetch(url, options, callback, resolve, reject) { throw "Not implemented"; }
-} 
-
-class beesHttp extends beesHandler {
-    constructor(http, https) {
-        super();
-        this.http = http;
-        this.https = https;
-    }
-
+class beesHttp {
     fetch(url, options = {}, callback = () => {}, resolve = () => {}, reject = () => {}) {
         const parseUrl = urlHelper.parse(url);
         const { protocol, hostname, port, pathname, query } = parseUrl;
         let { path } = parseUrl;
-        const reqObj = protocol==="https" ? this.https : this.http;
+        const reqObj = protocol==="https" ? https : http;
         
         const { data, timeout } = options;
         let { method, headers } = options;
@@ -133,11 +81,4 @@ class beesHttp extends beesHandler {
     }
 }
 
-class beesXmlHttp extends beesHandler {
-    constructor(xmlHttp) {
-        super();
-        this.xmlHttp = xmlHttp;
-    }
-}
-
-module.exports = bees;
+module.exports = beesHttp;
