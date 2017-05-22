@@ -2,29 +2,19 @@ const urlHelper = require('url');
 const querystring = require('querystring');
 
 class bees {
-    constructor() {
+    static fetch(url, options, callback) {
+        let handler = null;
         try { 
-            this._handler = new beesHttp(
-                require('http'), 
-                require('https')
-            );
+            handler = new beesHttp(require('http'), require('https'));
         } catch(e) {
             try { 
-                this._handler = new beesXmlHttp(
-                    require('xmlhttprequest')
-                );
+                handler = new beesXmlHttp(require('xmlhttprequest'));
             } catch(e) {}
         }
 
-        if(this._handler === undefined) {
-            throw "http or XMLHttpRequest modules needed.";
-        }
-    }
-
-    fetch(url, options) {
         return new Promise((resolve, reject) => {
             try {
-                this._handler.fetch(url, options, resolve, reject);
+                handler.fetch(url, options, callback, resolve, reject);
             } catch(e) {
                 console.log(e);
                 reject(e);
@@ -32,34 +22,33 @@ class bees {
         });
     }
 
-    get(url, options = {}) {
+    static get(url, options = {}, callback) {
         options['method'] = "GET";
-        return this.fetch(url, options);
+        return this.fetch(url, options, callback);
     }
 
-    post(url, options = {}) {
+    static post(url, options = {}, callback) {
         options['method'] = "POST";
-        return this.fetch(url, options);
-    }
-
-    abort() {
-        this._handler.abort();
+        return this.fetch(url, options, callback);
     }
 }
 
 class beesResponse {
     constructor(body) {
-        this._body = body;
+        this.toString = () => { return body; };
+        this.text = () => { return body; };
+        this.json = () => { return JSON.parse(body); };
     }
+}
 
-    toString() { return body; }
-    text() { return body; }
-    json() { return JSON.parse(this._body); }
+class beesRequest {
+    constructor(request) {
+        this.abort = () => { request.abort(); };
+    }
 }
 
 class beesHandler {
-    fetch(url, options, resolve, reject) { throw "Not implemented"; }
-    abort() { throw "Not implemented"; }
+    fetch(url, options, callback, resolve, reject) { throw "Not implemented"; }
 } 
 
 class beesHttp extends beesHandler {
@@ -69,13 +58,13 @@ class beesHttp extends beesHandler {
         this.https = https;
     }
 
-    fetch(url, options = {}, resolve = () => {}, reject = () => {}) {
+    fetch(url, options = {}, callback = () => {}, resolve = () => {}, reject = () => {}) {
         const parseUrl = urlHelper.parse(url);
         const { protocol, hostname, port, pathname, query } = parseUrl;
         let { path } = parseUrl;
         const reqObj = protocol==="https" ? this.https : this.http;
         
-        const { data } = options;
+        const { data, timeout } = options;
         let { method, headers } = options;
 
         method = method || 'GET';
@@ -94,15 +83,19 @@ class beesHttp extends beesHandler {
             }
 
             let body = "";
+            let requestOptions = {
+                method,
+                hostname,
+                port,
+                path,
+                headers,
+            };
+            if(timeout !== undefined) {
+                requestOptions['timeout'] = timeout;
+            }
 
-            this._request = reqObj.request(
-                {
-                    method,
-                    hostname,
-                    port,
-                    path,
-                    headers,
-                }, 
+            const request = reqObj.request(
+                requestOptions, 
                 (response) => {
                     response.setEncoding('utf-8');
 
@@ -114,22 +107,18 @@ class beesHttp extends beesHandler {
                     }
 
                     response.on('data', (chunk) => { body += chunk; });
-                    response.on('end', () => { 
-                        setTimeout(() => {
-                            resolve(new beesResponse(body)); 
-                        }, 5000);                        
-                    });
+                    response.on('end', () => { resolve(new beesResponse(body)); });
                 }
             );
 
-            this._request.on('error', (error) => {
+            request.on('error', (error) => {
                 reject({
                     message: error.message,
                     code: error.code,
                 });
             });
 
-            this._request.on('abort', () => { 
+            request.on('abort', () => { 
                 reject({
                     message: 'aborted',
                     code: 0,
@@ -137,12 +126,10 @@ class beesHttp extends beesHandler {
                 });
             });
 
-            this._request.end();
-        }
-    }
+            request.end();
 
-    abort() {
-        this._request.abort();
+            callback(new beesRequest(request));
+        }
     }
 }
 

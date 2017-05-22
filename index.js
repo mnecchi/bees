@@ -1,8 +1,9 @@
 //import BetterRequest from './BetterRequest';
 const bees = require('./bees');
 
-const xhr = new bees();
-xhr.get('http://localhost:3000/api/canals', 
+let xhr = null;
+
+bees.get('http://localhost:3000/api/canals', 
     {
         data: {
             lat: 52.2733348,
@@ -10,17 +11,18 @@ xhr.get('http://localhost:3000/api/canals',
             latDelta: 0.002,
             lonDelta: 0.002,
         }
+    }, (request) => { 
+        xhr = request; 
     }
 )
-.then(response => {
-    console.log(response.json());
+.then(response => response.json())
+.then(data => {
+    console.log(data);
 })
 .catch(err => {
     console.log(err);
 });
 
-xhr
-
-setTimeout(() => {
+/*setTimeout(() => {
     xhr.abort();
-}, 200);
+}, 200);*/
