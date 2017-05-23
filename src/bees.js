@@ -16,7 +16,7 @@ class bees {
                 try {
                     handler.fetch(url, options, callback, resolve, reject);
                 } catch(e) {
-                    console.log(e);
+                    //console.log(e);
                     reject(e);
                 }
             });

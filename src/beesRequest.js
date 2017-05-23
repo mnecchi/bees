@@ -1,6 +1,9 @@
 class beesRequest {
     constructor(request) {
-        this.abort = () => { request.abort(); };
+        this.abort = () => { 
+            request.isAborted = true;
+            request.abort(); 
+        };
     }
 }
 

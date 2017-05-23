@@ -14,15 +14,20 @@
                         lonDelta: 0.002,
                     }
                 }, function(request) { 
-                    console.log(request);
+                    //console.log(request);
                     xhr = request;
+                    //request.abort();
                 }
             )   
             .then(function(response) {
                 console.log(response.json());
             }) 
             .catch(function(err) {
-                console.log(err);
+                if(!err.isAborted) {
+                    console.error(err);
+                } else {
+                    console.log("ABORTED");
+                }
             });
         </script>
     </head>

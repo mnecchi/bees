@@ -15,8 +15,7 @@ class beesHttp {
         const { timeout } = options;
         let { method, data, headers } = options;
 
-        method = method || 'GET';
-        method = method.trim().toUpperCase();
+        method = (method || 'GET').trim().toUpperCase();
         headers = headers || {};
         data = data || {};
 

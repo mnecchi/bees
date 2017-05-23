@@ -11,8 +11,7 @@ class beesXmlHttp {
         const { timeout } = options;
         let { data, method, headers } = options;
 
-        method = method || 'GET';
-        method = method.trim().toUpperCase();
+        method = (method || 'GET').trim().toUpperCase();
         headers = headers || {};
         data = data || {};
 
@@ -24,16 +23,20 @@ class beesXmlHttp {
         } else {
 
             let qs = "";
-            if(method === "GET"){
-                qs = querystring.stringify(Object.assign(querystring.parse(query), data));
-            } else if(method === "POST") {
-                qs = query !== null ? query : "";
-                headers["Content-type"] = "application/x-www-form-urlencoded";
+            switch(method) {
+                case "GET":
+                   qs = querystring.stringify(Object.assign(querystring.parse(query), data));
+                   break;
+                case "POST":
+                    qs = query !== null ? query : "";
+                    headers["Content-type"] = "application/x-www-form-urlencoded";
+                    break;
+                default:
+                    break;
             }
-            let reqUrl = `${protocol}//${host}${pathname}${qs !== "" ? "?" : ""}${qs}`;
 
             const xhr = new XMLHttpRequest();
-            xhr.open(method, reqUrl, true);
+            xhr.open(method, `${protocol}//${host}${pathname}${qs !== "" ? "?" : ""}${qs}`, true);
             
             if(timeout !== undefined) {
                 xhr.timeout = timeout;
@@ -51,13 +54,13 @@ class beesXmlHttp {
                         reject({
                             message: xhr.statusText,
                             code: xhr.status,
+                            isAborted: xhr.isAborted === true,
                         });
                     }
                 }
             }
 
-            xhr.send(querystring.stringify(data));
-
+            xhr.send(method=="POST" ? querystring.stringify(data) : null);
             callback(new beesRequest(xhr));
         }
     }
