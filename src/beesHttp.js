@@ -12,23 +12,28 @@ class beesHttp {
         let { path } = parseUrl;
         const reqObj = protocol==="https" ? https : http;
         
-        const { data, timeout } = options;
-        let { method, headers } = options;
+        const { timeout } = options;
+        let { method, data, headers } = options;
 
         method = method || 'GET';
+        method = method.trim().toUpperCase();
         headers = headers || {};
+        data = data || {};
 
-        if(reqObj.METHODS.indexOf(method.trim().toUpperCase()) === -1) {
+        if(reqObj.METHODS.indexOf(method) === -1) {
             reject({
                 message: `Invalid method: ${method}`,
                 code: -1,
             });
         } else {
 
-            if(method === 'GET') {
-                const qs = querystring.stringify(Object.assign(querystring.parse(query), data));
-                path = `${pathname}${qs !== "" ? "?" : ""}${qs}`;
+            let qs = "";
+            if(method === "GET"){
+                qs = querystring.stringify(Object.assign(querystring.parse(query), data));
+            } else  {
+                qs = query;
             }
+            path = `${pathname}${qs !== "" ? "?" : ""}${qs}`; 
 
             let body = "";
             let requestOptions = {
@@ -74,6 +79,9 @@ class beesHttp {
                 });
             });
 
+            if(method === "POST") {
+                request.write(querystring.stringify(data));
+            }
             request.end();
 
             callback(new beesRequest(request));

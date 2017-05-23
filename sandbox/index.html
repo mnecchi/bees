@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <title>bees SandBox</title>
+        <script src="/bees.js"></script>
+        <script type="text/javascript">
+            var xhr = null;
+
+            bees.get('http://localhost:3000/api/canals', 
+                {
+                    data: {
+                        lat: 52.2733348,
+                        lon: -1.4525503,
+                        latDelta: 0.002,
+                        lonDelta: 0.002,
+                    }
+                }, function(request) { 
+                    console.log(request);
+                    xhr = request;
+                }
+            )   
+            .then(function(response) {
+                console.log(response.json());
+            }) 
+            .catch(function(err) {
+                console.log(err);
+            });
+        </script>
+    </head>
+    <body>
+        OK
+    </body>
+</html>

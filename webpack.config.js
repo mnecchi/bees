@@ -12,7 +12,17 @@ const config = {
     node: {
       process: false
     },
-    devtool: 'source-map'
+    devtool: 'source-map',
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+        })
+    ],
+    devServer: {
+        contentBase: path.join(__dirname, "sandbox"),
+        compress: true,
+        port: 9000
+    }
 };
 
 module.exports = config;
