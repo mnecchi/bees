@@ -20,6 +20,8 @@ class bees {
                     reject(e);
                 }
             });
+        } else {
+            throw new "No http or XmlHttpRequest module found";
         }
     }
 
