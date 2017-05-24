@@ -1,27 +1,31 @@
 class bees {
-    static fetch(url, options, callback) {
-        let handlerClass = null;
+    static getRequestHandler() {
         if(typeof XMLHttpRequest !== 'undefined') {
             // browser
-            handlerClass = require('./beesXmlHttp');
+            return require('./beesXmlHttp');
         } else if(typeof process !== 'undefined') {
             //node
-            handlerClass = require('./beesHttp');
+            return require('./beesHttp');
+        } else {
+            return null;
         }
+    }
+
+    static fetch(url, options, callback) {
+        const handlerClass = this.getRequestHandler();
 
         if(handlerClass !== null) {
-            const handler = new handlerClass();
-
+            const handler = handlerClass();
+            
             return new Promise((resolve, reject) => {
                 try {
                     handler.fetch(url, options, callback, resolve, reject);
                 } catch(e) {
-                    //console.log(e);
                     reject(e);
                 }
             });
         } else {
-            throw new "No http or XmlHttpRequest module found";
+            throw new Error("No http or XmlHttpRequest module found");
         }
     }
 
