@@ -1,15 +1,15 @@
-const bees = require('./dist/bees');
+const bees = require('./dist/bees.node');
 
-let xhr = null;
-bees.get('http://localhost:3000/api/canals', 
+const url = 'https://services.arcgis.com/DknzyjEEie5tEW0u/arcgis/rest/services/CRT_Canals_Public/FeatureServer/1/query?where=1%3D1&outFields=*&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelEnvelopeIntersects&outSR=4326&f=json';
+const data = {
+    geometry: "-1.4505,52.2713,-1.4545,52.2753",
+}   
+
+
+bees.get(url, 
     {
-        data: {
-            lat: 52.2733348,
-            lon: -1.4525503,
-            latDelta: 0.002,
-            lonDelta: 0.002,
-        }
-    }, (request) => { 
+        data
+    }, request => { 
         xhr = request; 
     }
 )
@@ -20,7 +20,3 @@ bees.get('http://localhost:3000/api/canals',
 .catch(err => {
     console.log(err);
 });
-
-/*setTimeout(() => {
-    xhr.abort();
-}, 200);*/

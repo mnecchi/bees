@@ -1,7 +1,7 @@
 const urlHelper = require('url');
 const querystring = require('querystring');
-const beesResponse = require('./beesResponse');
-const beesRequest = require('./beesRequest');
+const beesResponse = require('../helpers/beesResponse');
+const beesRequest = require('../helpers/beesRequest');
 const http = require('http');
 const https = require('https');
 
@@ -10,7 +10,7 @@ class beesHttp {
         const parseUrl = urlHelper.parse(url);
         const { protocol, hostname, port, pathname, query } = parseUrl;
         let { path } = parseUrl;
-        const reqObj = protocol==="https" ? https : http;
+        const reqObj = protocol==="https:" ? https : http;
         
         const { timeout } = options;
         let { method, data, headers } = options;
@@ -19,7 +19,7 @@ class beesHttp {
         headers = headers || {};
         data = data || {};
 
-        if(reqObj.METHODS.indexOf(method) === -1) {
+        if(['GET', 'POST'].indexOf(method) === -1) {
             reject({
                 message: `Invalid method: ${method}`,
                 code: -1,
@@ -37,14 +37,17 @@ class beesHttp {
             let body = "";
             let requestOptions = {
                 method,
+                protocol,
                 hostname,
-                port,
+                port: port===null ? protocol==="https:" ? 443 : 80 : port,
                 path,
                 headers,
             };
             if(timeout !== undefined) {
                 requestOptions['timeout'] = timeout;
             }
+
+            //console.log(requestOptions);
 
             const request = reqObj.request(
                 requestOptions, 

@@ -1,48 +1,33 @@
 const webpack = require('webpack');
 const minifier = require('babili-webpack-plugin');
-const webpackMerge = require('webpack-merge');
 const path = require('path');
 
-const commonConfig = {
-    entry: './src/bees.js',
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        library: 'bees',
-        libraryTarget: 'umd'
-    },
-    node: {
-        process: false
-    },
-    devtool: 'source-map',
-    devServer: {
-        contentBase: path.join(__dirname, "sandbox"),
-        compress: true,
-        port: 9000,
-    }
-};
-
-const configs = {
-    "unmin": {
+const configs = [
+    { 
+        target: 'web',
+        entry: './src/bees.js',
         output: {
-            filename: 'bees.js'
+            filename: 'bees.js',
+            path: path.resolve(__dirname, 'dist'),
+            library: 'bees',
+            libraryTarget: 'umd'
         },
-        plugins: [
-            new webpack.DefinePlugin({
-                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-            })
-        ]
+        devServer: {
+            contentBase: path.join(__dirname, "sandbox"),
+            compress: true,
+            port: 9000,
+        }
     },
-    "min": {
+    { 
+        target: 'node',
+        entry: './src/bees.js',
         output: {
-            filename: 'bees.min.js'
-        },
-        plugins: [
-            new webpack.DefinePlugin({
-                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-            }),
-            new minifier(),
-        ]
+            filename: 'bees.node.js',
+            path: path.resolve(__dirname, 'dist'),
+            library: 'bees',
+            libraryTarget: 'commonjs2'
+        }
     }
-};
+];
 
-module.exports = Object.keys(configs).map(key => webpackMerge(commonConfig, configs[key]));
+module.exports = configs;

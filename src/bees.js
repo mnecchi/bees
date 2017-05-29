@@ -1,32 +1,16 @@
+const handlerAdapter = require('./handler/beesHttpHandler');
+const handler = new handlerAdapter();
+
 class bees {
-    static getRequestHandler() {
-        if(typeof XMLHttpRequest !== 'undefined') {
-            // browser
-            return require('./beesXmlHttp');
-        } else if(typeof process !== 'undefined') {
-            //node
-            return require('./beesHttp');
-        } else {
-            return null;
-        }
-    }
-
     static fetch(url, options, callback) {
-        const handlerClass = this.getRequestHandler();
 
-        if(handlerClass !== null) {
-            const handler = handlerClass();
-            
-            return new Promise((resolve, reject) => {
-                try {
-                    handler.fetch(url, options, callback, resolve, reject);
-                } catch(e) {
-                    reject(e);
-                }
-            });
-        } else {
-            throw new Error("No http or XmlHttpRequest module found");
-        }
+        return new Promise((resolve, reject) => {
+            try {
+                handler.fetch(url, options, callback, resolve, reject);
+            } catch(e) {
+                reject(e);
+            }
+        });
     }
 
     static get(url, options = {}, callback) {

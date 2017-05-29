@@ -1,7 +1,7 @@
 const urlHelper = require('url');
 const querystring = require('querystring');
-const beesResponse = require('./beesResponse');
-const beesRequest = require('./beesRequest');
+const beesResponse = require('../helpers/beesResponse');
+const beesRequest = require('../helpers/beesRequest');
 
 class beesXmlHttp {
     fetch(url, options = {}, callback = () => {}, resolve = () => {}, reject = () => {}) {
