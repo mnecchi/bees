@@ -1,2 +1,7 @@
-dist/
+src/
 sandbox/
+test/
+.babelrc
+.gitignore
+.npmignore
+webpack.config.js
