@@ -10,8 +10,7 @@ bees.get(url,
     {
         data
     }, request => { 
-        xhr = request;
-        //request.abort();
+       //request.abort();
     }
 )
 .then(response => response.json())

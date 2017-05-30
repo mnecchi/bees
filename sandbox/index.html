@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>bees SandBox</title>
-        <script src="/bees.js"></script>
+        <script src="/bees.min.js"></script>
         <script type="text/javascript">
             var xhr = null;
             bees.get('https://services.arcgis.com/DknzyjEEie5tEW0u/arcgis/rest/services/CRT_Canals_Public/FeatureServer/1/query?where=1%3D1&outFields=*&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelEnvelopeIntersects&outSR=4326&f=json',
@@ -10,9 +10,7 @@
                         geometry: "-1.4505,52.2713,-1.4545,52.2753",
                     }
                 }, function(request) { 
-                    //console.log(request);
-                    xhr = request;
-                    request.abort();
+                    //request.abort();
                 }
             )   
             .then(function(response) {
