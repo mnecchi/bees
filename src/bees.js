@@ -1,8 +1,17 @@
-const handlerAdapter = require('./handler/beesHttpHandler');
-const handler = new handlerAdapter();
+const beesHttp = require("./beesHttp");
+const beesXmlHttp = require("./beesXmlHttp");
 
 class bees {
+    static getHttpHandler() {
+        if(typeof XMLHttpRequest !== 'undefined') {
+            return new beesXmlHttp();
+        } else if(typeof process !== 'undefined') {
+            return new beesHttp();
+        }
+    }
+
     static fetch(url, options, callback) {
+        const handler = this.getHttpHandler();
 
         return new Promise((resolve, reject) => {
             try {

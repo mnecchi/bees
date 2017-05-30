@@ -3,7 +3,7 @@
         <title>bees SandBox</title>
         <script src="/bees.js"></script>
         <script type="text/javascript">
-            /*var xhr = null;
+            var xhr = null;
             bees.get('https://services.arcgis.com/DknzyjEEie5tEW0u/arcgis/rest/services/CRT_Canals_Public/FeatureServer/1/query?where=1%3D1&outFields=*&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelEnvelopeIntersects&outSR=4326&f=json',
                 {
                     data: {
@@ -12,19 +12,15 @@
                 }, function(request) { 
                     //console.log(request);
                     xhr = request;
-                    //request.abort();
+                    request.abort();
                 }
             )   
             .then(function(response) {
                 console.log(response.json());
             }) 
             .catch(function(err) {
-                if(!err.isAborted) {
-                    console.error(err);
-                } else {
-                    console.log("ABORTED");
-                }
-            });*/
+                console.log(err);
+            });
         </script>
     </head>
     <body>
