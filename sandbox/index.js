@@ -1,4 +1,4 @@
-const bees = require('../dist/bees');
+const bees = require('../lib/bees-request');
 
 const url = 'https://services.arcgis.com/DknzyjEEie5tEW0u/arcgis/rest/services/CRT_Canals_Public/FeatureServer/1/query?where=1%3D1&outFields=*&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelEnvelopeIntersects&outSR=4326&f=json';
 const data = {
