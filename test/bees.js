@@ -5,7 +5,7 @@ var sinon = require('sinon');
 describe("bees request handler", function() {
     describe("static class", function() {       
         it("has a valid handler", function() {
-            var handler = bees.getRequestHandler();
+            var handler = bees.getHttpHandler();
             expect(handler).not.to.be.null;
         });
         it("has fetch method", function() {
