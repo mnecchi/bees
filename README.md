@@ -50,7 +50,7 @@ bees.fetch('http://example.com')
     .then(response => {
       ...
     })
-    .catch(error =. {
+    .catch(error => {
       ...
     });
   ```
@@ -69,7 +69,7 @@ bees.fetch('http://example.com')
     .then(response => {
       ...
     })
-    .catch(error =. {
+    .catch(error => {
       if(error.isAborted) {
         // the request has been aborted
       }
