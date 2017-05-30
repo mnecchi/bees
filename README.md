@@ -77,3 +77,11 @@ bees.fetch('http://example.com')
   
   request.abort();
   ```
+
+  Aliases:
+  
+  ``` js
+  bees.get(url, options, callback) // equivalent to fetch(url, options, callback) with options.method = 'GET'    
+  bees.post(url, options, callback) // equivalent to fetch(url, options, callback) with options.method = 'POST'
+  ```
+  
