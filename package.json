@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mnecchi/bees.git"
+    "url": "https://github.com/mnecchi/bees-request.git"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
