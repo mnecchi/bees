@@ -1,10 +1,9 @@
 const beesHttpHandler = require('./beesHttpHandler');
-const http = require('http');
-const https = require('https');
+const followRedirects = require('follow-redirects')
 
 class beesHttp extends beesHttpHandler {
     doFetch(options, onResponse, onError, onStart) {
-        const reqObj = options.protocol==="https:" ? https : http;
+        const reqObj = options.protocol==="https:" ? followRedirects.https : followRedirects.http;
         let body = "";
         
         const request = reqObj.request(

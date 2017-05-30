@@ -13,8 +13,9 @@ module.exports =  [
             libraryTarget: 'umd'
         },
         externals: {
-            http: 'http',
-            https: 'https',
+            "http": 'http',
+            "https": 'https',
+            "follow-redirects": 'follow-redirects',
         },
         devServer: {
             contentBase: path.join(__dirname, "sandbox"),
@@ -32,8 +33,9 @@ module.exports =  [
             libraryTarget: 'umd'
         },
         externals: {
-            http: 'http',
-            https: 'https',
+            "http": 'http',
+            "https": 'https',
+            "follow-redirects": 'follow-redirects',
         },
         devtool: 'source-map',
         plugins: [
