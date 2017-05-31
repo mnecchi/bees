@@ -25,52 +25,51 @@ beesRequest.fetch(options)
 
 options object has the following proprties:
 
-* *url*: the url for the request. If the url is specified as a fetch argument, it overwrites the value in the options object if present
+* *url*: the url for the request. If the url is specified as a fetch argument it overwrites the value in the options object if present
+* *method*: the method for the request. Default: GET
 * *data*: optional data to be appended to the querystring (GET) or sent in the request body (POST)
 * *headers*: optional key/value to be added to the request HTTP headers
 * *timeout*: optional timeout for the request (in milliseconds)
-* *callback*: function to be called when the request is sent. If the callback is specified as a fetch argument, it overwrites the value in the options object
+* *callback*: an optional function to be called when the request is sent. If the callback is specified as a fetch argument it overwrites the value in the options object
 
 
 Basic GET request:
 
 ``` js
 
-beesRequest.fetch('http://example.com')
-  .then(response => {
+beesRequest.fetch('http://example.com/api')
+  .then(function(response) {
     // response is an instance of beesResponse object
     // it has the following methods:
     // response.json() returns a json object 
     // response.text() returns the plain text object
     // response.toString() alias to .text()
+    console.log(response.text())
   })
-  .catch(error => {
+  .catch(function(error) {
     // error is an instance of beesError
     // it has the following properties:
     // error.message
     // error.code
     // error.isAborted - an error is raised when the request is aborted
+    console.log(error.message);
   });
   ```
-Request with options:
+POST Request with data:
 
 ``` js
   
 beesRequest.fetch({
-  url: 'http://example.com',
-  method: 'GET', // at the moment it supports only GET and POST (default: GET)
-  data: { // optional
-    // key/value pairs. for the GET method data is appended to the querystring
-  },
-  headers: { // optional
-    // key/value pairs.  
-  },
-  timeout: 10000 // timeout in milliseconds (optional)
+  url: 'http://example.com/api',
+  method: 'POST', 
+  data: { 
+    id: 1234
+  }
 })
-  .then(response => {
+  .then(function(response) {
     console.log(response.text())
   })
-  .catch(error => {
+  .catch(function(error) {
     console.error(error.message)
   });
 ```
@@ -81,14 +80,14 @@ Abort example:
 var request = null;
 
 beesRequest.fetch({
-  url: 'http://example.com'
+  url: 'http://example.com/api'
 }, (req) => {
   request = req
 })
-  .then(response => {
+  .then(function(response) {
       console.log(response.text())
   })
-  .catch(error => {
+  .catch(function(error) {
     if(error.isAborted) {
       // the request has been aborted
     } else {
