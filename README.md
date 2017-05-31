@@ -81,7 +81,7 @@ var request = null;
 
 beesRequest.fetch({
   url: 'http://example.com/api'
-}, (req) => {
+}, function(req) {
   request = req
 })
   .then(function(response) {
