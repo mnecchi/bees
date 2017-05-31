@@ -16,7 +16,7 @@
     "lib": "./umd"
   },
   "files": [
-    "./umd"
+    "umd"
   ],
   "repository": {
     "type": "git",
