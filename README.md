@@ -25,11 +25,11 @@ beesRequest.fetch(options)
 
 options object has the following proprties:
 
-* *url*: if the url is specified as a fetch argument, it overwrites the value in the options object if present
+* *url*: the url for the request. If the url is specified as a fetch argument, it overwrites the value in the options object if present
 * *data*: optional data to be appended to the querystring (GET) or sent in the request body (POST)
 * *headers*: optional key/value to be added to the request HTTP headers
 * *timeout*: optional timeout for the request (in milliseconds)
-* *callback*: function to be called when the request is sent. if the callback is specified as a fetch argument, it overwrites the value in the options object
+* *callback*: function to be called when the request is sent. If the callback is specified as a fetch argument, it overwrites the value in the options object
 
 
 Basic GET request:
