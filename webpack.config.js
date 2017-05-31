@@ -8,7 +8,7 @@ module.exports =  [
         entry: './src/bees.js',
         output: {
             filename: 'bees-request.js',
-            path: path.resolve(__dirname, 'lib'),
+            path: path.resolve(__dirname, 'umd'),
             library: 'bees',
             libraryTarget: 'umd'
         },
@@ -28,7 +28,7 @@ module.exports =  [
         entry: './src/bees.js',
         output: {
             filename: 'bees-request.min.js',
-            path: path.resolve(__dirname, 'lib'),
+            path: path.resolve(__dirname, 'umd'),
             library: 'bees',
             libraryTarget: 'umd'
         },
