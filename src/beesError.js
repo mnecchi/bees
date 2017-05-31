@@ -1,3 +1,5 @@
+"use strict";
+
 class beesError {
     constructor(error) {
         this.message = error.message || "";

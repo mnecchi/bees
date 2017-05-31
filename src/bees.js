@@ -1,3 +1,5 @@
+"use strict";
+
 const beesHttp = require("./beesHttp");
 const beesXmlHttp = require("./beesXmlHttp");
 

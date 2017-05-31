@@ -1,3 +1,5 @@
+"use strict";
+
 class beesResponse {
     constructor(body) {
         this.toString = () => { return body; };

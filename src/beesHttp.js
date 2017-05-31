@@ -1,3 +1,5 @@
+"use strict";
+
 const beesHttpHandler = require('./beesHttpHandler');
 const followRedirects = require('follow-redirects')
 

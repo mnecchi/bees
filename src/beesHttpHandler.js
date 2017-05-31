@@ -1,3 +1,5 @@
+"use strict";
+
 const urlHelper = require('url');
 const querystring = require('querystring');
 const beesRequest = require('./beesRequest');

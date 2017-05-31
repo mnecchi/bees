@@ -1,3 +1,5 @@
+"use strict";
+
 class beesRequest {
     constructor(request) {
         this.abort = () => { 
