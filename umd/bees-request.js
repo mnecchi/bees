@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define(["follow-redirects"], factory);
 	else if(typeof exports === 'object')
-		exports["bees"] = factory(require("follow-redirects"));
+		exports["beesRequest"] = factory(require("follow-redirects"));
 	else
-		root["bees"] = factory(root["follow-redirects"]);
+		root["beesRequest"] = factory(root["follow-redirects"]);
 })(this, function(__WEBPACK_EXTERNAL_MODULE_16__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

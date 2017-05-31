@@ -9,7 +9,7 @@ module.exports =  [
         output: {
             filename: 'bees-request.js',
             path: path.resolve(__dirname, 'umd'),
-            library: 'bees',
+            library: 'beesRequest',
             libraryTarget: 'umd'
         },
         externals: {
@@ -29,7 +29,7 @@ module.exports =  [
         output: {
             filename: 'bees-request.min.js',
             path: path.resolve(__dirname, 'umd'),
-            library: 'bees',
+            library: 'beesRequest',
             libraryTarget: 'umd'
         },
         externals: {
