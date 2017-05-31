@@ -13,7 +13,7 @@ npm install bees-request
 
 CDN:
 ``` html
-<sccript src="https://unpkg.com/bees-request/umd/bees-request.min.js"></script>
+<script src="https://unpkg.com/bees-request/umd/bees-request.min.js"></script>
 ```
 
 ## Usage
