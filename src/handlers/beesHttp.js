@@ -1,7 +1,8 @@
 "use strict";
 
 const beesHttpHandler = require('./beesHttpHandler');
-const followRedirects = require('follow-redirects')
+const followRedirects = require('follow-redirects');
+const querystring = require('querystring');
 
 class beesHttp extends beesHttpHandler {
     doFetch(options, onResponse, onError, onStart) {

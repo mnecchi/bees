@@ -1,4 +1,4 @@
-var bees = require('../src/bees.js');
+var bees = require('../src/beesRequest.js');
 var { expect } = require('chai'); 
 var sinon = require('sinon');
 

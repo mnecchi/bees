@@ -2,19 +2,22 @@
 
 const urlHelper = require('url');
 const querystring = require('querystring');
-const beesRequest = require('./beesRequest');
-const beesResponse = require('./beesResponse');
-const beesError = require('./beesError');
+const beesAbortableRequest = require('../helpers/beesAbortableRequest');
+const beesResponse = require('../helpers/beesResponse');
+const beesError = require('../helpers/beesError');
 
 class beesHttpHandler {
-    fetch(url, options = {}, callback = () => {}, resolve = () => {}, reject = () => {}) {
-        const parseUrl = urlHelper.parse(url);
-        const { protocol, hostname, port, pathname, query } = parseUrl;
-        let { path } = parseUrl;
-        
+    fetch(options = {}, resolve = () => {}, reject = () => {}) {
         const { timeout } = options;
-        let { method, data, headers } = options;
+        let { url, method, data, headers, callback } = options;
+        url = url || "";
+        callback = callback || function() {};
 
+        const parseUrl = urlHelper.parse(url);
+
+        const { protocol, hostname, port, pathname, query } = parseUrl;
+        let { path } = parseUrl;        
+        
         method = (method || 'GET').trim().toUpperCase();
         headers = headers || {};
         data = data || {};
@@ -56,7 +59,7 @@ class beesHttpHandler {
                     reject(new beesError(error));
                 }, 
                 request => {
-                    callback(new beesRequest(request));
+                    callback(new beesAbortableRequest(request));
                 }
             );
             

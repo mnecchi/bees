@@ -1,6 +1,7 @@
 "use strict";
 
 const beesHttpHandler = require('./beesHttpHandler');
+const querystring = require('querystring');
 
 class beesXmlHttp extends beesHttpHandler {
     doFetch(options, onResponse, onError, onStart) {

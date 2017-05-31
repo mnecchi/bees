@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -83,8 +83,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-exports.decode = exports.parse = __webpack_require__(6);
-exports.encode = exports.stringify = __webpack_require__(7);
+exports.decode = exports.parse = __webpack_require__(7);
+exports.encode = exports.stringify = __webpack_require__(8);
 
 
 /***/ }),
@@ -94,11 +94,28 @@ exports.encode = exports.stringify = __webpack_require__(7);
 "use strict";
 
 
-const urlHelper = __webpack_require__(8);
+class beesError {
+    constructor(error) {
+        this.message = error.message || "";
+        this.code = error.code || 0;
+        this.isAborted = error.isAborted===true;
+    }
+}
+
+module.exports = beesError;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+const urlHelper = __webpack_require__(9);
 const querystring = __webpack_require__(0);
-const beesRequest = __webpack_require__(14);
+const beesAbortableRequest = __webpack_require__(14);
 const beesResponse = __webpack_require__(15);
-const beesError = __webpack_require__(13);
+const beesError = __webpack_require__(1);
 
 class beesHttpHandler {
     fetch(url, options = {}, callback = () => {}, resolve = () => {}, reject = () => {}) {
@@ -150,7 +167,7 @@ class beesHttpHandler {
                     reject(new beesError(error));
                 }, 
                 request => {
-                    callback(new beesRequest(request));
+                    callback(new beesAbortableRequest(request));
                 }
             );
             
@@ -166,7 +183,7 @@ class beesHttpHandler {
 module.exports = beesHttpHandler;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -356,14 +373,15 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-const beesHttpHandler = __webpack_require__(1);
-const followRedirects = __webpack_require__(16)
+const beesHttpHandler = __webpack_require__(2);
+const followRedirects = __webpack_require__(16);
+const querystring = __webpack_require__(0);
 
 class beesHttp extends beesHttpHandler {
     doFetch(options, onResponse, onError, onStart) {
@@ -409,13 +427,14 @@ class beesHttp extends beesHttpHandler {
 module.exports = beesHttp;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-const beesHttpHandler = __webpack_require__(1);
+const beesHttpHandler = __webpack_require__(2);
+const querystring = __webpack_require__(0);
 
 class beesXmlHttp extends beesHttpHandler {
     doFetch(options, onResponse, onError, onStart) {
@@ -454,7 +473,7 @@ class beesXmlHttp extends beesHttpHandler {
 module.exports = beesXmlHttp;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/punycode v1.4.1 by @mathias */
@@ -990,10 +1009,10 @@ module.exports = beesXmlHttp;
 
 }(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)(module), __webpack_require__(10)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)(module), __webpack_require__(11)))
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1084,7 +1103,7 @@ var isArray = Array.isArray || function (xs) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1176,7 +1195,7 @@ var objectKeys = Object.keys || function (obj) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1203,8 +1222,8 @@ var objectKeys = Object.keys || function (obj) {
 
 
 
-var punycode = __webpack_require__(5);
-var util = __webpack_require__(9);
+var punycode = __webpack_require__(6);
+var util = __webpack_require__(10);
 
 exports.parse = urlParse;
 exports.resolve = urlResolve;
@@ -1915,7 +1934,7 @@ Url.prototype.parseHost = function() {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1938,7 +1957,7 @@ module.exports = {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 var g;
@@ -1965,7 +1984,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -1993,66 +2012,90 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
-const beesHttp = __webpack_require__(3);
-const beesXmlHttp = __webpack_require__(4);
+const beesHttp = __webpack_require__(4);
+const beesXmlHttp = __webpack_require__(5);
+const beesError = __webpack_require__(1);
 
-class bees {
+class beesRequest {
     static getHttpHandler() {
         if(typeof XMLHttpRequest !== 'undefined') {
             return new beesXmlHttp();
         } else if(typeof process !== 'undefined') {
             return new beesHttp();
+        } else {
+            return null;
         }
     }
 
-    static fetch(url, options, callback) {
-        const handler = this.getHttpHandler();
-
-        return new Promise((resolve, reject) => {
-            try {
-                handler.fetch(url, options, callback, resolve, reject);
-            } catch(e) {
-                reject(e);
+    static resolveArgs(args) {
+        if(args.length >= 2) {
+            return {
+                options: args[0],
+                callback: args[1]
+            };
+        } else if(args.length == 1) {
+            switch(typeof args[0]) {
+                case 'object':
+                    return { 
+                        options: args[0],
+                        callback: () => {}
+                    };
+                case 'function':
+                    return { 
+                        options: {},
+                        callback: args[0] 
+                    };
             }
-        });
+        } else {
+            return {
+                options: {},
+                callback: () => {},
+            }
+        }  
     }
 
-    static get(url, options = {}, callback) {
+    static doFetch(url, options, callback) {
+        const handler = this.getHttpHandler();
+        
+        if(handler !== null) {
+            return new Promise((resolve, reject) => {
+                try {
+                    handler.fetch(url, options, callback, resolve, reject);
+                } catch(e) {
+                    reject(e);
+                }
+            });
+        } else {
+            throw new beesError(new Error("No HTTP Handler found."));
+        }
+    }
+
+    static fetch(url, ...args) {
+        const { options, callback } = this.resolveArgs(args);
+        this.doFetch(url, options, callback);
+    }
+
+    static get(url, ...args) {
+        const { options, callback } = this.resolveArgs(args);
         options['method'] = "GET";
-        return this.fetch(url, options, callback);
+        return this.doFetch(url, options, callback);
     }
 
-    static post(url, options = {}, callback) {
+    static post(url, ...args) {
+        const { options, callback } = this.resolveArgs(args);
         options['method'] = "POST";
-        return this.fetch(url, options, callback);
+        return this.doFetch(url, options, callback);
     }
 }
 
-module.exports = bees;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-class beesError {
-    constructor(error) {
-        this.message = error.message || "";
-        this.code = error.code || 0;
-        this.isAborted = error.isAborted===true;
-    }
-}
-
-module.exports = beesError;
+module.exports = beesRequest;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
 /* 14 */
@@ -2061,7 +2104,7 @@ module.exports = beesError;
 "use strict";
 
 
-class beesRequest {
+class beesAbortableRequest {
     constructor(request) {
         this.abort = () => { 
             request.isAborted = true;
@@ -2070,7 +2113,7 @@ class beesRequest {
     }
 }
 
-module.exports = beesRequest;
+module.exports = beesAbortableRequest;
 
 /***/ }),
 /* 15 */

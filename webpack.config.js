@@ -5,7 +5,7 @@ const path = require('path');
 module.exports =  [
     { 
         target: 'web',
-        entry: './src/bees.js',
+        entry: './src/beesRequest.js',
         output: {
             filename: 'bees-request.js',
             path: path.resolve(__dirname, 'umd'),
@@ -25,7 +25,7 @@ module.exports =  [
     },
     {
         target: 'web',
-        entry: './src/bees.js',
+        entry: './src/beesRequest.js',
         output: {
             filename: 'bees-request.min.js',
             path: path.resolve(__dirname, 'umd'),
