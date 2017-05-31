@@ -64,7 +64,7 @@ class beesRequest {
     }
 
     static fetch(...args) {
-        this.doFetch(this.resolveArgs(args));
+        return this.doFetch(this.resolveArgs(args));
     }
 
     static get(...args) {

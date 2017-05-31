@@ -118,14 +118,17 @@ const beesResponse = __webpack_require__(15);
 const beesError = __webpack_require__(1);
 
 class beesHttpHandler {
-    fetch(url, options = {}, callback = () => {}, resolve = () => {}, reject = () => {}) {
-        const parseUrl = urlHelper.parse(url);
-        const { protocol, hostname, port, pathname, query } = parseUrl;
-        let { path } = parseUrl;
-        
+    fetch(options = {}, resolve = () => {}, reject = () => {}) {
         const { timeout } = options;
-        let { method, data, headers } = options;
+        let { url, method, data, headers, callback } = options;
+        url = url || "";
+        callback = callback || function() {};
 
+        const parseUrl = urlHelper.parse(url);
+
+        const { protocol, hostname, port, pathname, query } = parseUrl;
+        let { path } = parseUrl;        
+        
         method = (method || 'GET').trim().toUpperCase();
         headers = headers || {};
         data = data || {};
@@ -2034,39 +2037,44 @@ class beesRequest {
     }
 
     static resolveArgs(args) {
-        if(args.length >= 2) {
-            return {
-                options: args[0],
-                callback: args[1]
-            };
+        if(args.length >= 3) {
+            return Object.assign(args[1], {
+                url: args[0],
+                callback: args[2]
+            });
+        } else if(args.length == 2) {
+            switch(typeof args[1]) {
+                case 'object':
+                    return Object.assign(args[1], {
+                        url: args[0],
+                    });
+                case 'function':
+                    return {
+                        url: args[0],
+                        callback: args[1]
+                    }
+            }
         } else if(args.length == 1) {
             switch(typeof args[0]) {
                 case 'object':
-                    return { 
-                        options: args[0],
-                        callback: () => {}
-                    };
-                case 'function':
-                    return { 
-                        options: {},
-                        callback: args[0] 
+                    return args[0];
+                case 'string':
+                    return {
+                        url: args[0]
                     };
             }
         } else {
-            return {
-                options: {},
-                callback: () => {},
-            }
+            return {}
         }  
     }
 
-    static doFetch(url, options, callback) {
+    static doFetch(options) {
         const handler = this.getHttpHandler();
-        
+
         if(handler !== null) {
             return new Promise((resolve, reject) => {
                 try {
-                    handler.fetch(url, options, callback, resolve, reject);
+                    handler.fetch(options, resolve, reject);
                 } catch(e) {
                     reject(e);
                 }
@@ -2076,21 +2084,22 @@ class beesRequest {
         }
     }
 
-    static fetch(url, ...args) {
-        const { options, callback } = this.resolveArgs(args);
-        this.doFetch(url, options, callback);
+    static fetch(...args) {
+        return this.doFetch(this.resolveArgs(args));
     }
 
-    static get(url, ...args) {
-        const { options, callback } = this.resolveArgs(args);
-        options['method'] = "GET";
-        return this.doFetch(url, options, callback);
+    static get(...args) {
+        return this.doFetch(Object.assign(
+            this.resolveArgs(args), 
+            { method: "GET" }
+        ));
     }
 
-    static post(url, ...args) {
-        const { options, callback } = this.resolveArgs(args);
-        options['method'] = "POST";
-        return this.doFetch(url, options, callback);
+    static post(...args) {
+        return this.doFetch(Object.assign(
+            this.resolveArgs(args), 
+            { method: "POST" }
+        ));
     }
 }
 
