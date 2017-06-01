@@ -80,9 +80,10 @@ Abort example:
 var request = null;
 
 beesRequest.fetch({
-  url: 'http://example.com/api'
-}, function(req) {
-  request = req
+  url: 'http://example.com/api',
+  callback: function(req) {
+    request = req
+  }
 })
   .then(function(response) {
       console.log(response.text())
