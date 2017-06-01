@@ -1,27 +1,27 @@
 <html>
     <head>
         <title>bees SandBox</title>
-        <script src="/bees.js"></script>
+        <script src="/bees-request.js"></script>
+    </head>
+    <body>
+        <div id="main"></div>
         <script type="text/javascript">
             var xhr = null;
-            bees.get('https://services.arcgis.com/DknzyjEEie5tEW0u/arcgis/rest/services/CRT_Canals_Public/FeatureServer/1/query?where=1%3D1&outFields=*&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelEnvelopeIntersects&outSR=4326&f=json',
+            beesRequest.get(
                 {
-                    data: {
-                        geometry: "-1.4505,52.2713,-1.4545,52.2753",
+                    url: 'http://localhost:3000/api/test',
+                    callback: function(request) {
+                        request.abort();
+                        document.getElementById("main").innerText = "Loading...";
                     }
-                }, function(request) { 
-                    //request.abort();
                 }
             )   
             .then(function(response) {
-                console.log(response.json());
+                document.getElementById("main").innerText = response.text();
             }) 
             .catch(function(err) {
-                console.log(err);
+                document.getElementById("main").innerText = err.isAborted ? "ABORTED" : err.message;
             });
         </script>
-    </head>
-    <body>
-        OK
     </body>
 </html>

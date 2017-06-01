@@ -170,7 +170,9 @@ class beesHttpHandler {
                     reject(new beesError(error));
                 }, 
                 request => {
-                    callback(new beesAbortableRequest(request));
+                    setTimeout(() => { 
+                        callback(new beesAbortableRequest(request)); 
+                    }, 100);
                 }
             );
             
@@ -455,9 +457,13 @@ class beesXmlHttp extends beesHttpHandler {
         });
 
         xhr.onreadystatechange = () => {
-            if(xhr.readyState === 4) {
+            if(xhr.readyState === XMLHttpRequest.DONE) {
                 if(xhr.status === 200) {
                     onResponse(xhr.responseText);
+                } if(xhr.status===0 && !xhr.isAborted) {
+                    onError({
+                        message: "Could not connect to the server",
+                    });
                 } else {
                     onError({
                         message: xhr.statusText,
@@ -2115,10 +2121,13 @@ module.exports = beesRequest;
 
 class beesAbortableRequest {
     constructor(request) {
-        this.abort = () => { 
-            request.isAborted = true;
-            request.abort(); 
-        };
+        this.request = request;
+        this.request.isAborted = false;
+    }
+
+    abort() {
+        this.request.isAborted = true;
+        this.request.abort();
     }
 }
 
@@ -2133,9 +2142,29 @@ module.exports = beesAbortableRequest;
 
 class beesResponse {
     constructor(body) {
-        this.toString = () => { return body; };
-        this.text = () => { return body; };
-        this.json = () => { return JSON.parse(body); };
+        this.body = body;
+    }
+
+    toString() { return this.body; }
+    text() { return this.body; }
+    json() {
+        try {
+            return JSON.parse(this.body); 
+        } catch(e) {
+            if(e instanceof SyntaxError) {
+                return {};
+            } else {
+                throw e;
+            }
+        }
+    }
+    isJson() {
+        try { 
+            JSON.parse(this.body);
+            return true;
+        } catch(e) {
+            return false;
+        }
     }
 }
 

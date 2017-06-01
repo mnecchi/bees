@@ -1,16 +1,19 @@
-const bees = require('../src/beesRequest.js');
+//const bees = require('../umd/bees-request.js');
+const bees = require('../src/beesRequest');
 
-const url = 'https://services.arcgis.com/DknzyjEEie5tEW0u/arcgis/rest/services/CRT_Canals_Public/FeatureServer/1/query?where=1%3D1&outFields=*&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelEnvelopeIntersects&outSR=4326&f=json';
-const data = {
+//const url = 'https://services.arcgis.com/DknzyjEEie5tEW0u/arcgis/rest/services/CRT_Canals_Public/FeatureServer/1/query?where=1%3D1&outFields=*&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelEnvelopeIntersects&outSR=4326&f=json';
+/*const data = {
     geometry: "-1.4505,52.2713,-1.4545,52.2753",
-}   
+} */
 
+const url = "http://localhost:3000/api/test";  
 
-bees.get(
+bees.fetch(
     {
         url,
-        data,
-        callback: () => { console.log("OK!!!") }
+        callback: (req) => { 
+            //req.abort();
+        }
     }
     
 )

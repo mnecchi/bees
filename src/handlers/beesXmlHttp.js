@@ -19,9 +19,13 @@ class beesXmlHttp extends beesHttpHandler {
         });
 
         xhr.onreadystatechange = () => {
-            if(xhr.readyState === 4) {
+            if(xhr.readyState === XMLHttpRequest.DONE) {
                 if(xhr.status === 200) {
                     onResponse(xhr.responseText);
+                } if(xhr.status===0 && !xhr.isAborted) {
+                    onError({
+                        message: "Could not connect to the server",
+                    });
                 } else {
                     onError({
                         message: xhr.statusText,

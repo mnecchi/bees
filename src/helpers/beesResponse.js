@@ -2,9 +2,29 @@
 
 class beesResponse {
     constructor(body) {
-        this.toString = () => { return body; };
-        this.text = () => { return body; };
-        this.json = () => { return JSON.parse(body); };
+        this.body = body;
+    }
+
+    toString() { return this.body; }
+    text() { return this.body; }
+    json() {
+        try {
+            return JSON.parse(this.body); 
+        } catch(e) {
+            if(e instanceof SyntaxError) {
+                return {};
+            } else {
+                throw e;
+            }
+        }
+    }
+    isJson() {
+        try { 
+            JSON.parse(this.body);
+            return true;
+        } catch(e) {
+            return false;
+        }
     }
 }
 

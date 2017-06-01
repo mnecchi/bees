@@ -59,7 +59,9 @@ class beesHttpHandler {
                     reject(new beesError(error));
                 }, 
                 request => {
-                    callback(new beesAbortableRequest(request));
+                    setTimeout(() => { 
+                        callback(new beesAbortableRequest(request)); 
+                    }, 100);
                 }
             );
             

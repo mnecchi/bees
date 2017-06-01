@@ -22,6 +22,12 @@
     "type": "git",
     "url": "https://github.com/mnecchi/bees-request.git"
   },
+  "react-native": {
+    "./src/handlers/beesHttp.js": "./src/handlers/beesXmlHttp.js",
+    "http": false,
+    "https": false,
+    "follow-redirects": false
+  },
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
