@@ -1,7 +1,7 @@
 {
   "name": "bees-request",
   "version": "1.1.4",
-  "description": "A promise based simple abortable http client for node and browsers.",
+  "description": "A promise based simple abortable http client for node, browsers and React Native.",
   "main": "./umd/bees-request.js",
   "scripts": {
     "start": "./node_modules/.bin/webpack-dev-server",
