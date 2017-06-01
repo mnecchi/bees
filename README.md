@@ -1,7 +1,7 @@
 # bees-request [![npm version](https://img.shields.io/npm/v/bees-request.svg?style=flat)](https://www.npmjs.com/package/bees-request)
 
 A promise based simple abortable http client for node and browsers.
-bees-request uses the http or https modules on node and the XMLHttpRequest on the browsers.
+bees-request uses the http or https modules on node and the XMLHttpRequest on browsers and React Native.
 
 ## Installation
 
