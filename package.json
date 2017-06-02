@@ -1,9 +1,16 @@
 {
   "name": "bees-request",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "A promise based simple abortable http client for node, browsers and React Native.",
   "keywords": [
-    "api client", "http", "http-client", "http client", "abortable", "promise", "xmlhttprequest", "rest"
+    "api client",
+    "http",
+    "http-client",
+    "http client",
+    "abortable",
+    "promise",
+    "xmlhttprequest",
+    "rest"
   ],
   "bugs": {
     "url": "https://github.com/mnecchi/bees-request/issues",
