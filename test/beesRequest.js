@@ -74,6 +74,17 @@ describe("bees request handler", function() {
                 });
         });
 
+        it("(url) calls doFetch with the right options", function() {
+            var doFetchStub = sinon.stub(beesRequest, "doFetch").callsFake(function(options) { return options; });
+            var result = beesRequest.fetch("http://example.com");
+
+            expect(result.url).equals("http://example.com");
+            expect(result.data).to.be.undefined;  
+            expect(result.callback).to.be.undefined;   
+
+            doFetchStub.restore();     
+        });
+
         it("(url, options) calls doFetch with the right options", function() {
             var doFetchStub = sinon.stub(beesRequest, "doFetch").callsFake(function(options) { return options; });
             var result = beesRequest.fetch("http://example.com", { data: "OK" });
@@ -92,7 +103,7 @@ describe("bees request handler", function() {
             expect(result.url).equals("http://example.com");
             expect(result.data).equals("OK");
             expect(result.callback()).equals("OK");    
-            
+
             doFetchStub.restore();             
         });
     });
