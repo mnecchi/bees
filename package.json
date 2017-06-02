@@ -19,7 +19,8 @@
   "main": "./umd/bees-request.js",
   "scripts": {
     "start": "./node_modules/.bin/webpack-dev-server",
-    "test": "mocha"
+    "test": "mocha",
+    "build": "webpack; mocha;"
   },
   "author": "Massimo Necchi",
   "license": "MIT",

@@ -10,19 +10,19 @@ const url = "http://localhost:3000/api/test";
 
 bees.fetch(
     {
-        url,
+        url: "http://www.corriere.it",
         callback: (req) => { 
             //req.abort();
         }
     }
     
 )
-.then(response => response.json())
+.then(response => response.text())
 .then(data => {
     console.log(data);
 })
 .catch(err => {
-    console.log(err);
+    console.error(err);
 });
 
 /*
